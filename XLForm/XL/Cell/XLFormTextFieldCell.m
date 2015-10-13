@@ -69,7 +69,6 @@ NSString *const XLFormTextFieldLengthPercentage = @"textFieldLengthPercentage";
     [self setSelectionStyle:UITableViewCellSelectionStyleNone];
     [self.contentView addSubview:self.textLabel];
     [self.contentView addSubview:self.textField];
-    [self.contentView addConstraints:[self layoutConstraints]];
     [self.textLabel addObserver:self forKeyPath:@"text" options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:0];
     [self.imageView addObserver:self forKeyPath:@"image" options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:0];
     [self.textField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
@@ -154,18 +153,6 @@ NSString *const XLFormTextFieldLengthPercentage = @"textFieldLengthPercentage";
     return [self.textField becomeFirstResponder];
 }
 
--(void)highlight
-{
-    [super highlight];
-    self.textLabel.textColor = self.tintColor;
-}
-
--(void)unhighlight
-{
-    [super unhighlight];
-    [self.formViewController updateFormRow:self.rowDescriptor];
-}
-
 #pragma mark - Properties
 
 -(UILabel *)textLabel
@@ -181,59 +168,6 @@ NSString *const XLFormTextFieldLengthPercentage = @"textFieldLengthPercentage";
     _textField = [UITextField autolayoutView];
     return _textField;
 }
-
-#pragma mark - LayoutConstraints
-
--(NSArray *)layoutConstraints
-{
-    NSMutableArray * result = [[NSMutableArray alloc] init];
-    [self.textLabel setContentHuggingPriority:500 forAxis:UILayoutConstraintAxisHorizontal];
-    [self.textLabel setContentCompressionResistancePriority:1000 forAxis:UILayoutConstraintAxisHorizontal];
-
-    // Add Constraints
-    [result addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=11)-[_textField]-(>=11)-|" options:NSLayoutFormatAlignAllBaseline metrics:nil views:NSDictionaryOfVariableBindings(_textField)]];
-    [result addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(>=11)-[_textLabel]-(>=11)-|" options:NSLayoutFormatAlignAllBaseline metrics:nil views:NSDictionaryOfVariableBindings(_textLabel)]];
-
-    return result;
-}
-
--(void)updateConstraints
-{
-    if (self.dynamicCustomConstraints){
-        [self.contentView removeConstraints:self.dynamicCustomConstraints];
-    }
-    NSDictionary * views = @{@"label": self.textLabel, @"textField": self.textField, @"image": self.imageView};
-    NSDictionary *metrics = @{@"leftMargin" : @16.0, @"rightMargin" : self.textField.textAlignment == NSTextAlignmentRight ? @16.0 : @4.0};
-
-    if (self.imageView.image){
-        if (self.textLabel.text.length > 0){
-            self.dynamicCustomConstraints = [NSMutableArray arrayWithArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[image]-[label]-[textField]-(rightMargin)-|" options:0 metrics:metrics views:views]];
-        }
-        else{
-            self.dynamicCustomConstraints = [NSMutableArray arrayWithArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[image]-[textField]-(rightMargin)-|" options:0 metrics:metrics views:views]];
-        }
-    }
-    else{
-        if (self.textLabel.text.length > 0){
-            self.dynamicCustomConstraints = [NSMutableArray arrayWithArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(leftMargin)-[label]-[textField]-(rightMargin)-|" options:0 metrics:metrics views:views]];
-        }
-        else{
-            self.dynamicCustomConstraints = [NSMutableArray arrayWithArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(leftMargin)-[textField]-(rightMargin)-|" options:0 metrics:metrics views:views]];
-        }
-    }
-
-    [self.dynamicCustomConstraints addObject:[NSLayoutConstraint constraintWithItem:_textField
-                                                                          attribute:NSLayoutAttributeWidth
-                                                                          relatedBy:self.textFieldLengthPercentage ? NSLayoutRelationEqual : NSLayoutRelationGreaterThanOrEqual
-                                                                             toItem:self.contentView
-                                                                          attribute:NSLayoutAttributeWidth
-                                                                         multiplier:self.textFieldLengthPercentage ? [self.textFieldLengthPercentage floatValue] : 0.3
-                                                                           constant:0.0]];
-
-    [self.contentView addConstraints:self.dynamicCustomConstraints];
-    [super updateConstraints];
-}
-
 
 #pragma mark - UITextFieldDelegate
 
