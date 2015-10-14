@@ -307,6 +307,16 @@ NSString * const XLValidationStatusErrorKey = @"XLValidationStatusErrorKey";
     return result;
 }
 
+- (void)setFormValuesFromDictionary:(NSDictionary *)dictionary {
+    for (XLFormSectionDescriptor * section in self.formSections) {
+        for (XLFormRowDescriptor * row in section.formRows) {
+            if (row.tag.length > 0){
+                row.value = dictionary[row.tag];
+            }
+        }
+    }
+}
+
 -(NSDictionary *)httpParameters:(XLFormViewController *)formViewController
 {
     NSMutableDictionary * result = [NSMutableDictionary dictionary];

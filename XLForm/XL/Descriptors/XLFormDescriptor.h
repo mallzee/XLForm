@@ -80,6 +80,7 @@ typedef NS_OPTIONS(NSUInteger, XLFormRowNavigationOptions) {
 
 -(nullable NSIndexPath *)indexPathOfFormRow:(nonnull XLFormRowDescriptor *)formRow;
 
+- (void) setFormValuesFromDictionary:(nonnull NSDictionary *)dictionary;
 -(nonnull NSDictionary *)formValues;
 -(nonnull NSDictionary *)httpParameters:(nonnull XLFormViewController *)formViewController;
 
