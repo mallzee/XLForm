@@ -27,4 +27,6 @@
 
 @interface XLFormInlineSelectorCell : XLFormBaseCell
 
+-(NSString *)valueDisplayText;
+
 @end
