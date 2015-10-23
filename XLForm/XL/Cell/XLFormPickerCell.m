@@ -108,6 +108,11 @@
     if (self.inlineRowDescriptor){
         self.inlineRowDescriptor.value = [self.inlineRowDescriptor.selectorOptions objectAtIndex:row];
         [self.formViewController updateFormRow:self.inlineRowDescriptor];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"inlinePickerDidSelectRow"
+                                                            object:nil
+                                                          userInfo:@{@"rowDescriptor" : self.inlineRowDescriptor,
+                                                                     @"selectedRow" : [NSNumber numberWithInteger:row]}];
+
     }
     else{
         [self becomeFirstResponder];
