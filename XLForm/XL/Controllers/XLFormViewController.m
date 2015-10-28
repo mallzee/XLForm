@@ -264,7 +264,8 @@
                                                             XLFormRowDescriptorTypeDateTimeInline: XLFormRowDescriptorTypeDatePicker,
                                                             XLFormRowDescriptorTypeTimeInline: XLFormRowDescriptorTypeDatePicker,
                                                             XLFormRowDescriptorTypeCountDownTimerInline: XLFormRowDescriptorTypeDatePicker,
-                                                            @"deliveryAddressRowTag": XLFormRowDescriptorTypePicker
+                                                            @"deliveryAddressRowTag": XLFormRowDescriptorTypePicker,
+                                                            @"paymentCardRowTag": XLFormRowDescriptorTypePicker
                                                             } mutableCopy];
     });
     return _inlineRowDescriptorTypesForRowDescriptorTypes;
